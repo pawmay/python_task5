@@ -1,10 +1,10 @@
 import sys
 
-ALLOWED_MODES = ('saldo', 'sprzedaz', 'zakup', 'konto', 'magazyn', 'przeglad') # dozwolone tryby programu
-ALLOWED_COMMANDS = ('saldo', 'zakup', 'sprzedaz', 'stop') # dozwolone komendy
+ALLOWED_MODES = ('balance', 'sale', 'purchase', 'konto', 'magazyn', 'przeglad') # dozwolone tryby programu
+ALLOWED_COMMANDS = ('balance', 'purchase', 'sale', 'stop') # dozwolone komendy
 
 mode = sys.argv[1] # tryb programu
-saldo = 1000.0 # poczatkowe saldo
+balance = 1000.0 # poczatkowe saldo
 store = {
     'chleb': {'count': 2, 'price': 10.0},
     'mleko': {'count': 12, 'price': 4.0}
@@ -24,24 +24,24 @@ while True:
         print("Koniec programu!")
         break
 
-    if command == 'saldo':
+    if command == 'balance':
         amount = float(input("Kwota salda: "))
-        if (amount < 0) and (saldo + amount < 0):
+        if (amount < 0) and (balance + amount < 0):
             print("Nie masz środków na koncie!")
             continue
-        saldo += amount
+        balance += amount
         log = f"Zmiana saldo o: {amount}"
         logs.append(log)
-    elif command == 'zakup':
+    elif command == 'purchase':
         product_name = input(("Nazwa produktu: "))
         product_count = int(input("Ilość sztuk: "))
         product_price = float(input("Cena za sztukę: "))
         product_total_price = product_count * product_price
-        if product_total_price > saldo:
-            print(f"Cena za towary ({product_total_price}) przekracza wartość salda {saldo}.")
+        if product_total_price > balance:
+            print(f"Cena za towary ({product_total_price}) przekracza wartość salda {balance}.")
             continue
         else:
-            saldo -= product_total_price
+            balance -= product_total_price
             if not store.get(product_name):
                 store[product_name] = {'count': product_count, 'price': product_price}
             else:
@@ -51,7 +51,7 @@ while True:
                     'price': product_price}
         log = f"Dokonano zakupu produktu: {product_name} w ilości {product_count} sztuk, o cenie jednostkowej {product_price}."
         logs.append(log)
-    elif command == 'sprzedaz':
+    elif command == 'sale':
         product_name = input(("Nazwa produktu: "))
         product_count = int(input("Ilość sztuk: "))
         product_price = float(input("Cena za sztukę: "))
@@ -65,22 +65,22 @@ while True:
             'count': store.get(product_name)['count'] - product_count,
             'price': product_price
         }
-        saldo += product_count * product_price
+        balance += product_count * product_price
         if not store.get(product_name)['count']:
             del store[product_name]
         log = f"Dokonano sprzedaży produktu: {product_name} w ilości {product_count} sztuk, o cenie jednostkowej {product_price}."
         logs.append(log)
 
-if mode == 'saldo':
+if mode == 'balance':
     amount = float(sys.argv[2])
-    if (amount < 0) and (saldo + amount < 0):
+    if (amount < 0) and (balance + amount < 0):
         log = "Nie masz środków na koncie!"
     else:
-        saldo += amount
+        balance += amount
         log = f"Zmiana saldo o: {amount}. Komentarz: {sys.argv[3]}"
     logs.append(log)
     print(f'{sys.argv[2]} {sys.argv[3]}')
-elif mode == 'sprzedaz':
+elif mode == 'sale':
     product_name = sys.argv[2]
     product_count = float(sys.argv[4])
     product_price = float(sys.argv[3])
@@ -92,21 +92,21 @@ elif mode == 'sprzedaz':
         'count': store.get(product_name)['count'] - product_count,
         'price': product_price
     }
-    saldo += product_count * product_price
+    balance += product_count * product_price
     if not store.get(product_name)['count']:
         del store[product_name]
     log = f"Dokonano sprzedaży produktu: {product_name} w ilości {product_count} sztuk, o cenie jednostkowej {product_price}."
     logs.append(log)
     print(f'{product_name} {product_price} {product_count}')
-elif mode == 'zakup':
+elif mode == 'purchase':
     product_name = sys.argv[2]
     product_count = float(sys.argv[4])
     product_price = float(sys.argv[3])
     product_total_price = product_count * product_price
-    if product_total_price > saldo:
-        log = f"Cena za towary ({product_total_price}) przekracza wartość salda {saldo}."
+    if product_total_price > balance:
+        log = f"Cena za towary ({product_total_price}) przekracza wartość salda {balance}."
     else:
-        saldo -= product_total_price
+        balance -= product_total_price
         if not store.get(product_name):
             store[product_name] = {'count': product_count, 'price': product_price}
         else:
@@ -118,7 +118,7 @@ elif mode == 'zakup':
     logs.append(log)
     print(f'{product_name} {product_price} {product_count}')
 elif mode == 'konto':
-    print(f'SALDO: {saldo}')
+    print(f'SALDO: {balance}')
 elif mode == 'magazyn':
     print(f'MAGAZYN: {store}')
     print(f"{sys.argv[2]}: {store[sys.argv[2]]['count']}")

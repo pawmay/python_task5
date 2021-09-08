@@ -1,6 +1,6 @@
 import sys
 
-ALLOWED_MODES = ('balance', 'sale', 'purchase', 'konto', 'magazyn', 'przeglad') # dozwolone tryby programu
+ALLOWED_MODES = ('balance', 'sale', 'purchase', 'account', 'warehouse', 'overview') # dozwolone tryby programu
 ALLOWED_COMMANDS = ('balance', 'purchase', 'sale', 'stop') # dozwolone komendy
 
 mode = sys.argv[1] # tryb programu
@@ -117,14 +117,14 @@ elif mode == 'purchase':
     log = f"Dokonano zakupu produktu: {product_name} w ilości {product_count} sztuk, o cenie jednostkowej {product_price}."
     logs.append(log)
     print(f'{product_name} {product_price} {product_count}')
-elif mode == 'konto':
+elif mode == 'account':
     print(f'SALDO: {balance}')
-elif mode == 'magazyn':
+elif mode == 'warehouse':
     print(f'MAGAZYN: {store}')
     print(f"{sys.argv[2]}: {store[sys.argv[2]]['count']}")
     print(f"{sys.argv[3]}: {store[sys.argv[3]]['count']}")
     print(f"{sys.argv[4]}: {store[sys.argv[4]]['count']}")
-elif mode == 'przeglad':
+elif mode == 'overview':
     for i in range(int(sys.argv[2]), int(sys.argv[3])):
         print(logs[i])
 

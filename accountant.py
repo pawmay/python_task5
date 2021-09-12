@@ -5,10 +5,9 @@ ALLOWED_COMMANDS = ('balance', 'purchase', 'sale', 'stop') # dozwolone komendy
 
 mode = sys.argv[1] # tryb programu
 balance = 1000.0 # poczatkowe saldo
-store = {
-    'chleb': {'count': 2, 'price': 10.0},
-    'mleko': {'count': 12, 'price': 4.0}
-} # magazyn
+store = {'chleb': {'count': 2, 'price': 10.0},
+         'mleko': {'count': 12, 'price': 4.0}
+        } # magazyn
 logs = [] # historia operacji
 
 if mode not in ALLOWED_MODES:
@@ -33,7 +32,7 @@ while True:
         log = f"Zmiana saldo o: {amount}"
         logs.append(log)
     elif command == 'purchase':
-        product_name = input(("Nazwa produktu: "))
+        product_name = input("Nazwa produktu: ")
         product_count = int(input("Ilość sztuk: "))
         product_price = float(input("Cena za sztukę: "))
         product_total_price = product_count * product_price
@@ -52,7 +51,7 @@ while True:
         log = f"Dokonano zakupu produktu: {product_name} w ilości {product_count} sztuk, o cenie jednostkowej {product_price}."
         logs.append(log)
     elif command == 'sale':
-        product_name = input(("Nazwa produktu: "))
+        product_name = input("Nazwa produktu: ")
         product_count = int(input("Ilość sztuk: "))
         product_price = float(input("Cena za sztukę: "))
         if not store.get(product_name):
